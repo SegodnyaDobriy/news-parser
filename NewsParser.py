@@ -7,8 +7,7 @@ import csv
 
 chrome_options = Options()  # чтобы браузер не открывался
 chrome_options.add_argument('--headless')  # чтобы браузер не открывался
-browser = webdriver.Chrome('/Users/User/Desktop/chromedriver',
-                           options=chrome_options)  # ТОЛЬКО OPTIONS чтобы браузер не открывался
+browser = webdriver.Chrome('/Users/User/Desktop/chromedriver', options=chrome_options)  # ТОЛЬКО OPTIONS чтобы браузер не открывался
 URL = 'https://vivalacloud.ru/category/articles/'
 FILE = 'Pod news500.csv'
 
@@ -42,17 +41,13 @@ def parse():
 def scroll():
     SCROLL_PAUSE_TIME = 0.5
 
-    # Get scroll height
     last_height = browser.execute_script("return document.body.scrollHeight")
 
     while True:
-        # Scroll down to bottom
         browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
-        # Wait to load page
         sleep(SCROLL_PAUSE_TIME)
 
-        # Calculate new scroll height and compare with last scroll height
         new_height = browser.execute_script("return document.body.scrollHeight")
         if new_height == last_height:
             break
@@ -68,3 +63,5 @@ def save_file(items, path):
 
 
 parse()
+
+# это мой первый кринге
