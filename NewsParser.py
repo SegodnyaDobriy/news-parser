@@ -14,25 +14,25 @@ FILE = 'Pod news500.csv'
 
 def parse():
     browser.get(URL)
-    sleep(5)
-    scroll()
-    browser.find_element(By.ID, "loadmore").click()
-    sleep(3)
-    x = 0
-    while x != 501:
+    sleep(5)  # жду прогрузки страницы
+    scroll()  # скроллю, чтобы увидеть кнопку "Еще посты"
+    browser.find_element(By.ID, "loadmore").click()  # нажимаю на кнопку "Еще посты"
+    sleep(3)  # жду прогрузки новостей
+
+    for pages in range(1, 501):  # 500  - оптимальное количество страниц
         scroll()
-        print('Скроллю страницу:' + str(x))
-        x += 1
-    sleep(3)
+        print('Скроллю страницу:' + str(pages))
+
+    sleep(3)  # жду подргузки последней страницы
     soup = BeautifulSoup(browser.page_source, 'html.parser')
     items = soup.find_all('article', class_='post-block')
     pods = []
     for item in items:
-        if 'Pod' in item.find('h3', class_='heading').get_text(strip=True):  # проверка, Pod это или что-то другое
+        if 'Pod' in item.find('h3', class_='heading').get_text(strip=True):  # проверка, есть ли "Pod" в названии новости
             pods.append({
-                'title': item.find('h3', class_='heading').get_text(strip=True),
-                'png': item.find('img').get('src'),
-                'link': item.find('a', class_='picture').get('href')
+                'title': item.find('h3', class_='heading').get_text(strip=True),  # заголовок новости
+                'png': item.find('img').get('src'),                               # картинка Pod'а
+                'link': item.find('a', class_='picture').get('href')              # ссылка на новость
             })
 
     save_file(pods, FILE)
